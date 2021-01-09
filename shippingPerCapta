@@ -1,0 +1,15 @@
+This file describes the carbon footprint of different shipping modes
+Each type of shipping will use a mix of multiple shipping modes (kg/km)
+
+P
+Assume 80% of the distance travelled is by train
+       20% of the distance travelled is by truck
+
+Data Source: CN Carbon Calculator: https://www.cn.ca/en/delivering-responsibly/environment/emissions/carbon-calculator/
+
+Extrapolated Shipping Carbon Footprint (kg of good traveled by km distance)
+Truck:  0.00006 kgCO2
+Rail:   0.00002 kgCO2
+Vessel: 0.0000084638 kgCO2
+
+
