@@ -1,0 +1,20 @@
+This file describes the carbon footprint of different shipping modes
+Each type of shipping will use a mix of multiple shipping modes (kg/km)
+
+Prime:
+Assume 80% of the distance travelled is by air
+       20% of the distance travelled is by truck
+
+Assume 80% of the distance travelled is by train
+       20% of the distance travelled is by truck
+
+Data Source: https://www.sourcinghub.io/air-freight-vs-sea-freight-carbon-footprint/#:~:text=air%20shipping%20carbon%20footprint%20%E2%80%93%20which,grams%20of%20CO2%20per%20kilometer.
+Unit: kg CO2 footprint of 1kg of product by 1km
+Air: 0.0005
+Truck: 0.00011
+Train: 0.00007
+
+
+
+
+
