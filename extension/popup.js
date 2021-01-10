@@ -29,8 +29,6 @@ function format_page(){
     document.getElementById("dialogue").innerHTML = "\"meowser.... I need help\"";
     document.getElementById("cat_vid").src = "assets/cat_sneak_8fps.gif";
   }
-
-
   if (context.error_state){
     return;
   }
@@ -48,9 +46,6 @@ function format_page(){
       document.getElementById("dialogue").innerText = "I think this is going to hurt";
       document.getElementById("health").innerText = "PET HP: " + context.hp_change.toString();
     }
-  }
-  else if (context.is_checkout_page){
-
   }
 }
 
