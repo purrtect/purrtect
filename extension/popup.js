@@ -1,4 +1,4 @@
-
+chrome.browserAction.setIcon({path: "icon.png"}, function(){});
 
 document.addEventListener('DOMContentLoaded', function() {
     var checkPageButton = document.getElementById('checkPage');

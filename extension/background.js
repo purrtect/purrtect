@@ -85,7 +85,7 @@ chrome.runtime.onMessage.addListener(
         console.log(request.item_names[0]);
     }
     else if (request.msg_type === "SITE_BASIC_INFO_MSG"){
-      chrome.browserAction.setIcon({path: "earth.png"}, function(){});
+      chrome.browserAction.setIcon({path: "assets/alert2.png"}, function(){});
       var post_url = format_getURL("https://backend.purrtect.live/emissions", request.extraction);
       console.log(post_url);
       httpGetAsync(post_url, "emissions");
