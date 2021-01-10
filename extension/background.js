@@ -27,7 +27,7 @@ function resetIcon(){
 
 function format_getURL(url, data){
     var data = url + "?" + 
-    "product=" +  data.title.replace("&amp;", "%26") + "&" +
+    "product=" +  data.title.replace(/[^a-z0-9+]+/gi, '')+ "&" +
     "category=" +  data.category.replace("&amp;", "%26") + "&" +
     "isPrime=" +  data.is_prime + "&" +
     "weight=" +  data.weight.replace("&amp;", "%26") + "&" +
@@ -86,7 +86,7 @@ chrome.runtime.onMessage.addListener(
     }
     else if (request.msg_type === "SITE_BASIC_INFO_MSG"){
       chrome.browserAction.setIcon({path: "earth.png"}, function(){});
-      var post_url = format_getURL("https://purrtect.live/emissions", request.extraction);
+      var post_url = format_getURL("https://backend.purrtect.live/emissions", request.extraction);
       console.log(post_url);
       httpGetAsync(post_url, "emissions");
       Notification.display(opt);
@@ -98,11 +98,13 @@ chrome.runtime.onMessage.addListener(
         }
     }
     sendResponse({farewell: request.msg_type+" success"});
+    Promise.resolve("").then(result => sendResponse(result));
+    return true;
     }
   );
 
   chrome.notifications.onClicked.addListener(function(notificationId){
-    chrome.tabs.create({ url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO" });
+    chrome.tabs.create({ url: "http://purrtect.live/my-cat" });
   });
 
   chrome.tabs.onActiveChanged.addListener(function(tabId, selectInfo){

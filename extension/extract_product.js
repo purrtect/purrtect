@@ -14,7 +14,7 @@ var extraction = {
     Manufacturer: "",
     Manufacturer_contact: ""
 };
-
+var dummy;
 function processCells(tag, value){
     switch(tag){
         case "ASIN":
@@ -43,13 +43,18 @@ function processCells(tag, value){
 }
 
 
+extraction.category = document.getElementById("nav-search-label-id").innerHTML;
+
 //category title url and such
-[extraction.title, extraction.web_domain, extraction.category] = document.title.split(":");
+[extraction.title, extraction.web_domain, dummy] = document.title.split(":");
+if (extraction.title === "Amazon.ca Laptops"){
+    extraction.title=extraction.web_domain;
+    extraction.category = "computer"
+}
 extraction.title = extraction.title.trim();
 extraction.url = document.URL;
 extraction.user_zip = document.getElementById("glow-ingress-line2").innerText.split("...")[1].trim().replace(" ", "").substring(0,6);
 // category = document.getElementById("wayfinding-breadcrumbs_feature_div").getElementsByTagName("li")[0].getElementsByClassName("a-link-normal a-color-tertiary")[0].innerHTML.trim();
-extraction.category = document.getElementById("nav-search-label-id").innerHTML;
 
 if(document.getElementById("priceBadging_feature_div")){
     if(document.getElementById("priceBadging_feature_div").getElementsByClassName("a-icon a-icon-prime").length)
