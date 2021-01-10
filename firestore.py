@@ -2,7 +2,6 @@ from google.cloud import firestore
 from cat import Cat
 
 def get_emissions(type, name):
-    name = name.lower()
     if type is None:
         return None
     else:
@@ -63,10 +62,11 @@ def get_cat(username):
         
         
 
-def new_product(product, emissions):
+def new_product(product, emissions, zip = None):
     db = firestore.Client()
+
     data = {
-        product: float(emissions)
+        product: [float(emissions), str(zip)] if zip is not None else [float(emissions)]
     }
     db.collection(u'CarbonEmissions').document('Products').set(data, merge=True)
 

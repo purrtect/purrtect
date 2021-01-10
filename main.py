@@ -43,7 +43,7 @@ def emissions():
     # I understand that weight is measured in Newtons and this variable should be mass,
     # but steven made his function take in weight, and therefore the variable is called weight.
     weight = request.values.get("weight")
-    price = float(request.values.get("price"))
+    price = float(request.values.get("price")) if request.values['price'] is not None else None
     zip1 = request.values.get("zip1")
     zip2 = request.values.get("zip2")
     if category is None and product is None:
@@ -54,22 +54,24 @@ def emissions():
 
         # search for product
         if product is not None:
-            emissions_orig = get_emissions('Product', product)
-            if emissions_orig is not None:
+            prod = get_emissions('Product', product)
+            if prod is not None:
+                emissions_orig = prod[0]
+                zip2 = prod[1]
                 emissions = carbon_footprint(isPrime, emissions_orig, zip1, zip2, weight)
                 return jsonify({
-                'type': 'product',
-                'name': product.lower(),
-                'emissions':
-                {
-                    'total_emissions': emissions[0],
-                    'shipping_emissions': emissions[1],
-                    'product_emissions': emissions[2]
-                },
-                'loc1': emissions[3][0] if emissions[4] is not None else None,
-                'loc2': emissions[4][0] if emissions[4] is not None else None,
-                'success': True,
-                'hp_change': cat.get_hp_from_carbon(emissions[0], price) if cat else 'N/A'
+                    'type': 'product',
+                    'name': product,
+                    'emissions':
+                    {
+                        'total_emissions': emissions[0],
+                        'shipping_emissions': emissions[1],
+                        'product_emissions': emissions[2]
+                    },
+                    'loc1': emissions[3][0] if emissions[4] is not None else None,
+                    'loc2': emissions[4][0] if emissions[4] is not None else None,
+                    'success': True,
+                    'hp_change': cat.get_hp_from_carbon(emissions[0], price) if cat else 'N/A'
                 })
         
         # search for category
@@ -80,7 +82,7 @@ def emissions():
         if emissions_orig is not None:
             if product is not None:
                 # cache product emissions
-                new_product(product, emissions_orig)
+                new_product(product, emissions_orig, zip2)
             
             emissions = carbon_footprint(isPrime, emissions_orig, zip1, zip2, weight)
             return jsonify({
