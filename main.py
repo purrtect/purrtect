@@ -1,8 +1,8 @@
 import logging
 import authentication
 from share import share
-from errors import InvalidAPICall
-from firestore import get_emissions
+from errors import InvalidAPICall, AuthenticationError
+from firestore import get_emissions, new_product, make_cat, get_cat
 from carbon_footprint_calculator import carbon_footprint
 
 from flask import current_app, flash, Flask, Markup, redirect, render_template, jsonify, session
@@ -42,27 +42,49 @@ def emissions():
     # I understand that weight is measured in Newtons and this variable should be mass,
     # but steven made his function take in weight, and therefore the variable is called weight.
     weight = request.values.get("weight")
+    price = float(request.values.get("price"))
     zip1 = request.values.get("zip1")
     zip2 = request.values.get("zip2")
     if category is None and product is None:
         raise InvalidAPICall('Please include product and/category in POST or GET.', 400)
     else:
+        # get cat
+
+        if session['authenticated']:
+            cat = get_cat(session['username'])
+        else:
+            cat = False
+
         # search for product
         if product is not None:
-            emissions = get_emissions('Product', product)
-            if emissions is not None:
+            emissions_orig = get_emissions('Product', product)
+            if emissions_orig is not None:
+                emissions = carbon_footprint(isPrime, emissions_orig, zip1, zip2, weight)
                 return jsonify({
                 'type': 'product',
                 'name': product.lower(),
-                'emissions': emissions,
-                'success': True
-            })
+                'emissions':
+                {
+                    'total_emissions': emissions[0],
+                    'shipping_emissions': emissions[1],
+                    'product_emissions': emissions[2]
+                },
+                'loc1': emissions[3][0] if emissions[4] is not None else None,
+                'loc2': emissions[4][0] if emissions[4] is not None else None,
+                'success': True,
+                'hp_after': cat.get_hp_from_carbon(emissions[0], price) if cat else 'N/A'
+                })
         
         # search for category
         if isPrime is None or weight is None:
             raise InvalidAPICall('Please include isPrime, weight, zip1, and zip2 in POST or GET if using category.', 400)
         emissions_orig = get_emissions('Category', category)
+
         if emissions_orig is not None:
+            if product is not None:
+                # cache product emissions
+                new_product(product, emissions_orig)
+            
             emissions = carbon_footprint(isPrime, emissions_orig, zip1, zip2, weight)
             return jsonify({
                 'type': 'category',
@@ -75,7 +97,8 @@ def emissions():
                 },
                 'loc1': emissions[3][0] if emissions[4] is not None else None,
                 'loc2': emissions[4][0] if emissions[4] is not None else None,
-                'success': True
+                'success': True,
+                'hp_after': cat.get_hp_from_carbon(emissions[0], price) if cat else 'N/A'
             })
         else:
             return jsonify({
@@ -122,6 +145,39 @@ def signup():
             'username': username
         })
 
+@app.route('/catcreation', methods=['GET', 'POST'])
+def cat_creation():
+    cat_name = request.values["name"]
+    if session['authenticated']:
+        cat = make_cat(session['username'], cat_name)
+        return jsonify({
+            'success': True,
+            'cat': cat.to_dict(),
+            'username': session['username']
+        })
+    else:
+        raise AuthenticationError()
+
+@app.route('/cat', methods=['GET', 'POST'])
+def ret_cat():
+    if session['authenticated']:
+        cat = get_cat(session['username']).to_dict()
+        if not cat:
+            return jsonify({
+                'success': False,
+                'cat_created': False,
+                'username': session['username']
+            })
+        else:
+            return jsonify({
+                'success': True,
+                'cat_created': True,
+                'username': session['username'],
+                'cat': cat
+            })
+    else:
+        raise AuthenticationError()
+
 @app.route('/share', methods=['GET', 'POST'])
 def get_social_url():
     site = request.values['site']
@@ -139,11 +195,26 @@ def get_social_url():
 def debug():
     return f"{session['authenticated']} | {session['username']}"
 
+@app.route('/user', methods=['GET', 'POST'])
+def get_user():
+    # get user from firestore
+    user = authentication.get_user(session['username'])
+    del user['password']
+    del user['salt']
+    return jsonify(user)
+
 @app.errorhandler(InvalidAPICall)
 def handle_invalid_usage(error):
     ret = jsonify(error.to_dict())
     ret.status_code = error.status
     return ret
+
+@app.errorhandler(AuthenticationError)
+def handle_invalid_auth(error):
+    ret = jsonify(error.to_dict())
+    ret.status_code = error.status
+    return ret
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=True)

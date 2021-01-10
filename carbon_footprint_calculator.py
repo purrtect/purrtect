@@ -22,7 +22,7 @@ Train = 0.00007
 ## Total Carbon footprint, Shipping Carbon footprint, Product Carbon footprint, loc1 of zip1, loc2 of zip2
 def carbon_footprint(IsPrime, category, zip1, zip2, weight):
     distance, loc1, loc2 = distance_calculator(zip1, zip2)
-    numPattern = '\d+\.?\d*'
+    numPattern = r'\d+\.?\d*'
 
     if (weight != None and len(re.findall(numPattern, weight)) != 0):
         weight = weight_calculator(weight)
@@ -43,7 +43,7 @@ def carbon_footprint(IsPrime, category, zip1, zip2, weight):
     else:
         shipping_emission = weight * (Truck * distance * 0.2 + Train * distance * 0.8)
 
-    print("Shipping emission %f, Product emission %f" % (shipping_emission, product_emission))
+    #print("Shipping emission %f, Product emission %f" % (shipping_emission, product_emission))
     return shipping_emission + product_emission, shipping_emission, product_emission, loc1, loc2
 
 
@@ -72,7 +72,7 @@ def distance_calculator(zip1, zip2):
 #takes in weight of the product in g, gram, kg, kilogram
 #returns weight in kg
 def weight_calculator(weight):
-    numPattern = '\d+\.?\d*'
+    numPattern = r'\d+\.?\d*'
     try:
         num = float(re.findall(numPattern, weight)[0])
     except:
