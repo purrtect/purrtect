@@ -79,7 +79,7 @@ def weight_calculator(weight):
         print("no num found")
         num = 1
     patternKG = '(?:kg|kilo)'
-    if(len(re.findall(patternKG, weight))==0): #in grams
+    if(len(re.findall(patternKG, weight.lower()))==0): #in grams
         num /=1000
     return num
 
