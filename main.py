@@ -60,9 +60,9 @@ def emissions():
         # search for category
         if isPrime is None or weight is None:
             raise InvalidAPICall('Please include isPrime, weight, zip1, and zip2 in POST or GET if using category.', 400)
-        emissions = get_emissions('Category', category)
-        if emissions is not None:
-            emissions = carbon_footprint(isPrime, emissions, zip1, zip2, weight)
+        emissions_orig = get_emissions('Category', category)
+        if emissions_orig is not None:
+            emissions = carbon_footprint(isPrime, emissions_orig, zip1, zip2, weight)
             return jsonify({
                 'type': 'category',
                 'name': category.lower(),
@@ -78,6 +78,10 @@ def emissions():
             })
         else:
             return jsonify({
+                'isPrime': isPrime,
+                'emissions': emissions_orig,
+                'zip1': zip1,
+                'zip2': zip2,
                 'success': False
             })
 
@@ -99,7 +103,7 @@ def auth():
         })
     # return jsonify(authentication.login(username, password))
 
-@app.route('/debug', methods=['GET'])
+@app.route('/debug', methods=['GET', 'POST'])
 def debug():
     return f"{session['authenticated']} | {session['username']}"
 
