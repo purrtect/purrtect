@@ -2,7 +2,7 @@ import urllib.request
 import json
 import re
 
-api_key_google= 'AIzaSyCXkcgLEtAP8pKulgO3SGqotjR9wd8bNaY'
+api_key_google= ''
 
 #shipping pollution
 #source: https://www.sourcinghub.io/air-freight-vs-sea-freight-carbon-footprint/#:~:text=air%20shipping%20carbon%20footprint%20%E2%80%93%20which,grams%20of%20CO2%20per%20kilometer.
@@ -49,6 +49,9 @@ def carbon_footprint(IsPrime, category, zip1, zip2, weight):
 
 
 def distance_calculator(zip1, zip2):
+    f = open("gmap_api.txt", "r")
+    api_key_google = f.read()
+
     zip1 = zip1.replace(' ','')
     zip2 = zip2.replace(' ', '')
     def_google_url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=" + zip1 + "&destinations=" + zip2 + "&mode=car&sensor=false&key=" + api_key_google
