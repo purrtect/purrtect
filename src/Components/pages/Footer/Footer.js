@@ -41,7 +41,7 @@ function Footer() {
   const handleSubmit = (event) => {
     alert('A form was submitted: ' + this.state);
     //////////////////////////////frank's changes
-    var theUrl = "backend.purrtect.live/authentication?" +
+    var theUrl = "https://backend.purrtect.live/authentication?" +
                   "username=" + email + "&" +
                   "password=" + password;
     var xmlHttp = new XMLHttpRequest();
