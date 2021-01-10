@@ -10,11 +10,15 @@ class Cat:
         price_modifier = price * 0.01
         if (price_modifier>10):
             price_modifier = 10
-        self.hp_change = round((32.87-carbon_footprint)/100*abs(price_modifier))
+
+        if (32.87-carbon_footprint > 0):
+            self.hp_change = round((32.87 - carbon_footprint) / 10)
+        else:
+            self.hp_change = round((32.87-carbon_footprint)/100*abs(price_modifier))
         if (self.hp_change > 3):
             self.hp_change = 3
-        if (self.hp_change < -10):
-            self.hp_change = -10
+        if (self.hp_change < -5):
+            self.hp_change = -5
         return self.hp_change
 
     def change_hp(self, hp_change):
