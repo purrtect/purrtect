@@ -68,7 +68,7 @@ def new_product(product, emissions):
     data = {
         product: float(emissions)
     }
-    db.collection(u'CarbonEmissions').document('Products').set(data)
+    db.collection(u'CarbonEmissions').document('Products').set(data, merge=True)
 
 if __name__ == '__main__':
     make_cat('sf1', 'steve', 5, 1, False)

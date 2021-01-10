@@ -50,9 +50,6 @@ def emissions():
         raise InvalidAPICall('Please include product and/category in POST or GET.', 400)
     else:
         # get cat
-
-        if session['authenticated']:
-            cat = get_cat(session['username'])
         if not cat:
             cat = Cat('placeholder', 0)
 
@@ -73,11 +70,11 @@ def emissions():
                 'loc1': emissions[3][0] if emissions[4] is not None else None,
                 'loc2': emissions[4][0] if emissions[4] is not None else None,
                 'success': True,
-                'hp_after': cat.get_hp_from_carbon(emissions[0], price) if cat else 'N/A'
+                'hp_change': cat.get_hp_from_carbon(emissions[0], price) if cat else 'N/A'
                 })
         
         # search for category
-        if isPrime is None or weight is None:
+        if isPrime is None:
             raise InvalidAPICall('Please include isPrime, weight, zip1, and zip2 in POST or GET if using category.', 400)
         emissions_orig = get_emissions('Category', category)
 
@@ -99,7 +96,7 @@ def emissions():
                 'loc1': emissions[3][0] if emissions[4] is not None else None,
                 'loc2': emissions[4][0] if emissions[4] is not None else None,
                 'success': True,
-                'hp_after': cat.get_hp_from_carbon(emissions[0], price) if cat else 'N/A'
+                'hp_change': cat.get_hp_from_carbon(emissions[0], price) if cat else 'N/A'
             })
         else:
             return jsonify({
@@ -149,7 +146,7 @@ def signup():
 @app.route('/catcreation', methods=['GET', 'POST'])
 def cat_creation():
     cat_name = request.values["name"]
-    if session['authenticated']:
+    if not session['authenticated'] == None and session['authenticated']:
         cat = make_cat(session['username'], cat_name)
         return jsonify({
             'success': True,
@@ -161,7 +158,7 @@ def cat_creation():
 
 @app.route('/cat', methods=['GET', 'POST'])
 def ret_cat():
-    if session['authenticated']:
+    if not session['authenticated'] == None and session['authenticated']:
         cat = get_cat(session['username']).to_dict()
         if not cat:
             return jsonify({
