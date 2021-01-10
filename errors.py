@@ -9,5 +9,6 @@ class InvalidAPICall(Exception):
     def to_dict(self):
         return {
             'message': self.message,
-            'status': self.status
+            'status': self.status,
+            'success': False
         }

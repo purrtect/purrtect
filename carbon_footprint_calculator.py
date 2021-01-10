@@ -16,8 +16,7 @@ Train = 0.00007
 ## Weight, category, Zip1,Zip2
 ## Category: Amazon category emission, kg carbon co2 per kg product weight (in float)
 ## Zip1, zip2, zip code of the orgin and destination (in string)
-## weight --> weight of the product, either in g, or kg (in string)
-
+## weight --> mass of the product, either in g, or kg (in string)
 def carbon_footprint(IsPrime, category, zip1, zip2, weight):
     distance = distance_calculator(zip1, zip2)
     if (weight != None):

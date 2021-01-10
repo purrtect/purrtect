@@ -2,6 +2,7 @@ import logging
 import authentication
 from errors import InvalidAPICall
 from firestore import get_emissions
+from carbon_footprint_calculator import carbon_footprint
 
 from flask import current_app, flash, Flask, Markup, redirect, render_template, jsonify, session
 from flask import request, url_for
@@ -21,10 +22,18 @@ def homepage():
 def stuffpage():
     return '<h1>stuff</h1>'
 
+# /emissions
+# 
 @app.route('/emissions', methods=['GET', 'POST'])
 def emissions():
     product = request.values.get("product")
     category = request.values.get("category")
+    isPrime = True if request.values.get("isPrime").lower() == 'true' else False if request.values.get("isPrime").lower() == 'false' else None
+    # I understand that weight is measured in Newtons and this variable should be mass,
+    # but steven made his function take in weight, and therefore the variable is called weight.
+    weight = request.values.get("weight")
+    zip1 = request.values.get("zip1")
+    zip2 = request.values.get("zip2")
     if category is None and product is None:
         raise InvalidAPICall('Please include product and/category in POST or GET.', 400)
     else:
@@ -40,9 +49,11 @@ def emissions():
             })
         
         # search for category
+        if isPrime is None or weight is None or zip1 is None or zip2 is None:
+            raise InvalidAPICall('Please include isPrime, weight, zip1, and zip2 in POST or GET if using category.', 400)
         emissions = get_emissions('Category', category)
         if emissions is not None:
-            # TODO: Insert Steven Function
+            emissions = carbon_footprint(isPrime, emissions, zip1, zip2, weight)
             return jsonify({
                 'type': 'category',
                 'name': category.lower(),
