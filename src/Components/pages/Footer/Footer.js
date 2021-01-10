@@ -41,7 +41,7 @@ function Footer() {
   const handleSubmit = (event) => {
     alert('A form was submitted: ' + this.state);
 
-    fetch('backend.purrtect.live/debug', {
+    fetch('backend.purrtect.live/authentication', {
         method: 'POST',
         // We convert the React state to JSON and send it as the POST body
         body: JSON.stringify({useremail: email, password:password})
