@@ -1,5 +1,6 @@
 import logging
 import authentication
+from share import share
 from errors import InvalidAPICall
 from firestore import get_emissions
 from carbon_footprint_calculator import carbon_footprint
@@ -103,14 +104,36 @@ def auth():
         })
     # return jsonify(authentication.login(username, password))
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    # replace with request.form in deployment
+    username = request.values["username"]
+    password = request.values["password"]
+    if authentication.signup(username,password):
+        return jsonify({
+            'success': True,
+            'user_exists': False,
+            'username': username
+        })
+    else:
+        return jsonify({
+            'success': False,
+            'user_exists': True,
+            'username': username
+        })
+
 @app.route('/share', methods=['GET', 'POST'])
 def get_social_url():
     site = request.values['site']
     subject = request.values['subject']
-    message = request.values['subject']
-    link = request.values['subject']
-
-    
+    message = request.values['message']
+    link = request.values['link']
+    if subject is None:
+        subject = ''
+    if message is None:
+        message = ''
+    ret_link = share(site, subject, message, link)
+    return redirect(ret_link, code=302)
 
 @app.route('/debug', methods=['GET', 'POST'])
 def debug():
