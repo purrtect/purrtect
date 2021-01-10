@@ -102,6 +102,13 @@ def purchase(username, product, price, emissions):
         user.set(data, merge=True)
         return True
     return False
+
+def fetch_purchases(username):
+    db = firestore.Client()
+    purchases = db.collection(u'Users').document(username).get().to_dict()['purchase_history']
+    return purchases
+
+
     
 if __name__ == '__main__':
     make_cat('sf1', 'steve', 5, 1, False)

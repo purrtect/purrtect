@@ -3,7 +3,7 @@ import logging
 import authentication
 from share import share
 from errors import InvalidAPICall, AuthenticationError
-from firestore import get_emissions, new_product, make_cat, get_cat, update_cat, purchase
+from firestore import get_emissions, new_product, make_cat, get_cat, update_cat, purchase, fetch_purchases
 from carbon_footprint_calculator import carbon_footprint
 
 from flask import current_app, flash, Flask, Markup, redirect, render_template, jsonify, session
@@ -164,6 +164,12 @@ def make_purchase():
                         'cat_updated': cat_updated
                     })
     
+@app.route('/purchases', methods=['GET', 'POST'])
+def get_purchases():
+    if session['authenticated'] is None or session['authenticated'] == False:
+        raise AuthenticationError()
+    return jsonify(fetch_purchases(session['username']))
+
 
 @app.route('/authentication', methods=['GET', 'POST'])
 def auth():
@@ -259,9 +265,17 @@ def get_user():
     del user['salt']
     return jsonify(user)
 
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session['authenticated'] = False
+    session['username'] = ''
+    return jsonify({
+        'success': True
+    })
+
 @app.route('/resurrect', methods=['GET', 'POST'])
 def add_health():
-    if session['authorized'] is not None and session['authorized']:
+    if session['authenticated'] is not None and session['authenticated']:
         cat = get_cat(session['username'])
         cat.resurrect()
         update_cat(session['username'], cat)
