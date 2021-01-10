@@ -47,7 +47,6 @@ function Footer() {
         body: JSON.stringify({useremail: email, password:password})
       }).then(function(response) {
         console.log(response)
-        setlogin("alallalala");
         return response.json();
       });
 
