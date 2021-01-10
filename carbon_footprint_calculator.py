@@ -63,9 +63,12 @@ def distance_calculator(zip1, zip2):
 #takes in weight of the product in g, gram, kg, kilogram
 #returns weight in kg
 def weight_calculator(weight):
-    x = weight.split(' ')
-    num = float(x[0])
-    unit = x[1]
+    numPattern = '\d+\.?\d*'
+    try:
+        num = float(re.findall(numPattern, weight)[0])
+    except:
+        print("no num found")
+        num = 1
     patternKG = '(?:kg|kilo)'
     if(len(re.findall(patternKG, weight))==0): #in grams
         num /=1000
@@ -75,7 +78,7 @@ def weight_calculator(weight):
 if __name__ =='__main__':
     zipcode1 = '91748'
     zipcode2 = 'L4C0P8'
-    weight = 'kg'
+    weight = '12.3 kg'
     category = 0.1
     isPrime = False
     print(carbon_footprint(isPrime,category,zipcode1, zipcode2, weight))
