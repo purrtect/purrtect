@@ -12,14 +12,19 @@
         <img class="pop-up-img" src="angry.gif" alt="angry cat">
       </div>
       <div class="col">
-        <div class="dialog-text-wrapper">
+        <div id="dialogue" class="dialog-text-wrapper">
           Dumb ass human you just killed me :(
         </div>
-        <div class="status-text-wrapper">PET HP: -1000</div>
+        <div id="progressbar">
+          <div id="old-health">
+            <div id="new-health"></div>
+          </div>
+        </div>
+        <div id="health" class="status-text-wrapper">PET HP: -1000</div>
       </div>
     </div>
     <div class="row-single-btn">
-      <button onclick="window.location.href='https://w3docs.com';">
+      <button id = "go to site">
         Go to Purrtector App
       </button>
     </div>

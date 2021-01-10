@@ -3,10 +3,20 @@ var opt = {
     title: "Cat-astrophic purr-chase",
     message: "your purchase will cost me x hp",
     expandedMessage: "well i might use this or i might not",
-    iconUrl: "earth.png",
+    iconUrl: "assets/icon.png",
     silent: true
 };
-//      Notification.display(opt);
+
+var popup_context = {
+    is_product_page:  false,
+    is_checkout_page: false,
+    error_state: false,
+    emissions: 0,
+    hp_change: 0
+}
+var reset_popup_context = Object.assign({}, popup_context);
+
+
 var Notification=(function(){
     var notification=null;
   
@@ -21,8 +31,10 @@ var Notification=(function(){
     };
 })();
 
+
 function resetIcon(){
-    chrome.browserAction.setIcon({path: "icon.png"}, function(){});
+    chrome.browserAction.setIcon({path: "assets/icon.png"}, function(){});
+    popup_context = Object.assign({}, reset_popup_context);
 }
 
 function format_getURL(url, data){
@@ -38,6 +50,15 @@ function format_getURL(url, data){
     return data;
 }
 
+function format_getURL2(url, data){
+    var data = url + "?" + 
+    "product=" +  data.title.replace(/[^a-z0-9+]+/gi, '')+ "&" +
+    "isPrime=" +  data.is_prime + "&" +
+    "zip1=" +  data.user_zip.replace("&amp;", "%26")
+
+    return data;
+}
+
 function httpGetAsync(theUrl, topic)
 {
     var xmlHttp = new XMLHttpRequest();
@@ -47,8 +68,11 @@ function httpGetAsync(theUrl, topic)
             var jsobj = JSON.parse(jsonvar);
             console.log(jsobj);
             if(jsobj.success){
-                chrome.runtime.sendMessage({msg_type: "HTTP_GET_RESP", 
-                                            topic: topic, retval: jsobj}, function(response){});
+                popup_context.hp_change += jsobj.hp_change;
+                popup_context.emissions = jsobj.emissions.total_emissions;
+            }
+            else{
+                popup_context.error_state = true;
             }
         }
     }
@@ -64,11 +88,13 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
     console.log(tab.url);
     if(tab.url === "https://www.amazon.ca/gp/buy/spc/handlers/display.html?hasWorkingJavascript=1"){
         console.log("On amazon checkout page");
+        popup_context.is_checkout_page = true;
         chrome.tabs.executeScript(null, {
             file: 'extract_info.js'
         },null);
     }
     else if (tab.url.includes("www.amazon.ca") && (tab.url.includes("/dp/")||tab.url.includes("/product/"))){
+        popup_context.is_product_page = true;
         chrome.tabs.executeScript(null, {
             file: 'extract_product.js'
         },null);
@@ -82,7 +108,12 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
     if (request.msg_type === "CHECKOUT_INFO_MSG"){
-        console.log(request.item_names[0]);
+        for (var i = 0; i<request.item_names.length; i++){
+            console.log(request.item_names[i]);
+            var post_url = format_getURL2("https://backend.purrtect.live/emissions", {title: request.item_names[i], is_prime:false, user_zip: request.zip});
+            httpGetAsync(post_url, "emissions");
+        }
+        sendResponse({farewell: request.msg_type+" success"});
     }
     else if (request.msg_type === "SITE_BASIC_INFO_MSG"){
       chrome.browserAction.setIcon({path: "assets/alert2.png"}, function(){});
@@ -90,21 +121,26 @@ chrome.runtime.onMessage.addListener(
       console.log(post_url);
       httpGetAsync(post_url, "emissions");
       Notification.display(opt);
+      sendResponse({farewell: request.msg_type+" success"});
+    }
+    else if(request.msg_type === "POPUP_CONTEXT"){
+        sendResponse({context: popup_context});
     }
     else if(request.msg_type === "HTTP_GET_RESP"){
         if(request.topic === "emissions"){
             //we now have emissions data probably update the js or something
             console.log(request.retval);
         }
+        sendResponse({farewell: request.msg_type+" success"});
     }
-    sendResponse({farewell: request.msg_type+" success"});
+
     Promise.resolve("").then(result => sendResponse(result));
     return true;
     }
   );
 
   chrome.notifications.onClicked.addListener(function(notificationId){
-    chrome.tabs.create({ url: "http://purrtect.live/my-cat" });
+    chrome.tabs.create({ url: "https://purrtect.live/" });
   });
 
   chrome.tabs.onActiveChanged.addListener(function(tabId, selectInfo){

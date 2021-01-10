@@ -24,7 +24,16 @@ function processCells(tag, value){
             extraction.Manufacturer = value.trim();
             break;
         case "Manufacturer contact":
-            extraction.Manufacturer_contact = value.split(",")[2].trim().split(" ")[0];
+            //extraction.Manufacturer_contact = value.split(",")[2].trim().split(" ")[0];
+            extraction.Manufacturer_contact = value.split(",")
+            if(extraction.Manufacturer_contact[extraction.Manufacturer_contact.length-1].trim()==="CA"){
+                extraction.Manufacturer_contact = extraction.Manufacturer_contact[1].replace(" ", "");
+                extraction.Manufacturer_contact = extraction.Manufacturer_contact.substr(3).replace(" ","");
+            }
+            else{
+                extraction.Manufacturer_contact = extraction.Manufacturer_contact[2].trim().split(" ")[0];
+            }
+            if (extraction.Manufacturer_contact.length < 5) extraction.Manufacturer_contact = "";
             break;
         case "Item Weight" :
             extraction.weight = value.trim();

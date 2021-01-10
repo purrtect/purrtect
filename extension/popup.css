@@ -70,3 +70,26 @@ button {
     margin-bottom: 15px;
     margin-left: -10px;
 }
+
+
+#progressbar {
+    background-color: black;
+    border-radius: 13px;
+    /* (height of inner div) / 2 + padding */
+    padding: 3px;
+  }
+  
+  #progressbar>div {
+    background-color: orange;
+    width: 80%;
+    /* Adjust with JavaScript */
+    height: 13px;
+    border-radius: 10px;
+  }
+  #progressbar>div>div {
+    background-color: green;
+    width: 100%;
+    /* Adjust with JavaScript */
+    height: 13px;
+    border-radius: 10px;
+  }
