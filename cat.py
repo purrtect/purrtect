@@ -25,6 +25,10 @@ class Cat:
         else:
             self.dead = False
         return
+    
+    def resurrect(self):
+        self.hp = 20
+        self.dead = False
 
     def to_array(self):
         return [self.name, self.hp, self.skin, self.dead]

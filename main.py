@@ -259,6 +259,16 @@ def get_user():
     del user['salt']
     return jsonify(user)
 
+@app.route('/resurrect', methods=['GET', 'POST'])
+def add_health():
+    if session['authorized'] is not None and session['authorized']:
+        cat = get_cat(session['username'])
+        cat.resurrect()
+        update_cat(session['username'], cat)
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False})
+
 @app.errorhandler(InvalidAPICall)
 def handle_invalid_usage(error):
     ret = jsonify(error.to_dict())
