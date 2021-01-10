@@ -58,7 +58,7 @@ def emissions():
             })
         
         # search for category
-        if isPrime is None or weight is None or zip1 is None or zip2 is None:
+        if isPrime is None or weight is None:
             raise InvalidAPICall('Please include isPrime, weight, zip1, and zip2 in POST or GET if using category.', 400)
         emissions = get_emissions('Category', category)
         if emissions is not None:
@@ -66,7 +66,14 @@ def emissions():
             return jsonify({
                 'type': 'category',
                 'name': category.lower(),
-                'emissions': emissions,
+                'emissions':
+                {
+                    'total_emissions': emissions[0],
+                    'shipping_emissions': emissions[1],
+                    'product_emissions': emissions[2]
+                },
+                'loc1': emissions[3][0] if emissions[4] is not None else None,
+                'loc2': emissions[4][0] if emissions[4] is not None else None,
                 'success': True
             })
         else:

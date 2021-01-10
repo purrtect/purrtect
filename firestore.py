@@ -1,6 +1,7 @@
 from google.cloud import firestore
 
 def get_emissions(type, name):
+    name = name.lower()
     if type is None:
         return None
     else:
