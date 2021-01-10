@@ -79,15 +79,20 @@ def weight_calculator(weight):
         print("no num found")
         num = 1
     patternKG = '(?:kg|kilo)'
-    if(len(re.findall(patternKG, weight.lower()))==0): #in grams
-        num /=1000
+    patternLb = '(?:lb|pound)'
+
+    if(len(re.findall(patternLb, weight.lower()))!=0): #in pound
+        num *= 0.453592 #convert to kg
+    elif(len(re.findall(patternKG, weight.lower()))==0): #in grams
+        num /=1000 #convert to kg
+
     return num
 
 
 if __name__ =='__main__':
     zipcode1 = '91748'
     zipcode2 = 'L4C0P8'
-    weight = '1002 kg'
+    weight = '1002 lb'
     category = 0.1
     isPrime = True
     print(carbon_footprint(isPrime,category,zipcode1, zipcode2, weight))
