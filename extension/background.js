@@ -1,6 +1,6 @@
 var opt = {
     type: "basic",
-    title: "Cat-astrophic purr-chase",
+    title: "Purchase logged!",
     message: "your purchase will cost me x hp",
     expandedMessage: "well i might use this or i might not",
     iconUrl: "assets/icon.png",
@@ -54,13 +54,13 @@ function format_getURL2(url, data){
     var data = url + "?" + 
     "product=" +  data.title.replace(/[^a-z0-9+]+/gi, '')+ "&" +
     "isPrime=" +  data.is_prime + "&" +
-    "zip1=" +  data.user_zip.replace("&amp;", "%26")
-
+    "zip1=" +  data.user_zip.replace("&amp;", "%26") + "&" +
+    "price=" +  data.price
     return data;
 }
 
 function httpGetAsync(theUrl, topic)
-{
+{   console.log(theUrl);
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
@@ -85,6 +85,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
     if (changeInfo.status != "complete"){
         return;
     }
+    resetIcon();
     console.log(tab.url);
     if(tab.url === "https://www.amazon.ca/gp/buy/spc/handlers/display.html?hasWorkingJavascript=1"){
         console.log("On amazon checkout page");
@@ -99,9 +100,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
             file: 'extract_product.js'
         },null);
     }
-    else {
-        resetIcon();
-    }
+
 });
 //document.getElementById("spc-orders").getElementsByClassName("asin-title")[0].innerHTML
 //recieves message when scraping is complete
@@ -110,17 +109,23 @@ chrome.runtime.onMessage.addListener(
     if (request.msg_type === "CHECKOUT_INFO_MSG"){
         for (var i = 0; i<request.item_names.length; i++){
             console.log(request.item_names[i]);
-            var post_url = format_getURL2("https://backend.purrtect.live/emissions", {title: request.item_names[i], is_prime:false, user_zip: request.zip});
+            var post_url = format_getURL2("https://backend.purrtect.live/purchase", {title: request.item_names[i], 
+                                                        is_prime:request.item_prime[i], user_zip: request.zip,
+                                                        price: request.item_prices[i]});
             httpGetAsync(post_url, "emissions");
         }
+        if(popup_context.hp_change<0)
+            opt.message = "your purchase cost me ";
+        else
+            opt.message = "your purchase gave me ";
+        opt.message += popup_context.hp_change.toString() + " hp!!!"
+        Notification.display(opt);
         sendResponse({farewell: request.msg_type+" success"});
     }
     else if (request.msg_type === "SITE_BASIC_INFO_MSG"){
       chrome.browserAction.setIcon({path: "assets/alert2.png"}, function(){});
       var post_url = format_getURL("https://backend.purrtect.live/emissions", request.extraction);
-      console.log(post_url);
       httpGetAsync(post_url, "emissions");
-      Notification.display(opt);
       sendResponse({farewell: request.msg_type+" success"});
     }
     else if(request.msg_type === "POPUP_CONTEXT"){
