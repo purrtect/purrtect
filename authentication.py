@@ -1,10 +1,6 @@
 from firestore import get_user, make_user
 import bcrypt
 
-def create_user(username, password):
-    
-    pass
-
 def login(username, password):
     user = get_user(username)
     # return user

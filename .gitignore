@@ -181,3 +181,5 @@ fabric.properties
 # modules.xml
 # .idea/misc.xml
 # *.ipr
+#
+gmap_api.txt
