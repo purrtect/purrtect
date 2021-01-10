@@ -62,7 +62,9 @@ if (extraction.title === "Amazon.ca Laptops"){
 }
 extraction.title = extraction.title.trim();
 extraction.url = document.URL;
-extraction.user_zip = document.getElementById("glow-ingress-line2").innerText.split("...")[1].trim().replace(" ", "").substring(0,6);
+extraction.user_zip = document.getElementById("glow-ingress-line2").innerText.split(" ");
+extraction.user_zip = extraction.user_zip[extraction.user_zip.length-2]+extraction.user_zip[extraction.user_zip.length-1]
+//extraction.user_zip = document.getElementById("glow-ingress-line2").innerText.split("...")[1].trim().replace(" ", "").substring(0,6);
 // category = document.getElementById("wayfinding-breadcrumbs_feature_div").getElementsByTagName("li")[0].getElementsByClassName("a-link-normal a-color-tertiary")[0].innerHTML.trim();
 
 if(document.getElementById("priceBadging_feature_div")){
