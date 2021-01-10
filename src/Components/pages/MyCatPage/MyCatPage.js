@@ -145,17 +145,17 @@ function MyCatPage() {
                 <div className="row-share">
                         <a  target="_blank"
                             rel="noreferrer"
-                            href={shareable ? "https://backend.purrtect.live/share?site=facebook&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "purrtect.live/my-cat"}>
+                            href={shareable ? "https://backend.purrtect.live/share?site=facebook&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "/my-cat"}>
                             <FaFacebook color="#5199ec" fontSize="50px"/>
                         </a>
                         <a  target="_blank"
                             rel="noreferrer"
-                            href={shareable ? "https://backend.purrtect.live/share?site=twitter&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "purrtect.live/my-cat"}>
+                            href={shareable ? "https://backend.purrtect.live/share?site=twitter&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "/my-cat"}>
                             <FaTwitter color="#5199ec" fontSize="50px"/>
                         </a>
                         <a  target="_blank"
                             rel="noreferrer"
-                            href={shareable ? "https://backend.purrtect.live/share?site=linkedin&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "purrtect.live/my-cat"}>
+                            href={shareable ? "https://backend.purrtect.live/share?site=linkedin&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "/my-cat"}>
                             <FaLinkedin color="#5199ec" fontSize="50px"/>
                         </a>
                 </div>
