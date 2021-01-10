@@ -8,6 +8,7 @@ import Fish from '../../images/fish.png'
 import OrangeTrophy from '../../images/cat-trophy-1.png'
 import GreyTrophy from '../../images/cat-trophy-2.png'
 import CandyTrophy from '../../images/cat-trophy-3.png'
+import { FaFacebook, FaInstagram } from 'react-icons/fa'
 
 const homeObjDonate = {
     lightBg: false,
@@ -35,11 +36,13 @@ function MyCatPage() {
                             <div className='cat-info-line'>Name: ThunderGrey</div>
                             <div className='cat-info-line'>Skin: Grey</div>
                             <div className='cat-info-line' style={{padding:"0 0 20px 0"}}>Exp: Need Graphics</div>
-                            <Link to="/edit-cat">
-                                <Button buttonStyle="primary" buttonColor="light-blue" buttonSize="btn--small">
-                                    Edit Cat Info
-                                </Button>
-                            </Link>
+                            <div className='btn-to-right'>
+                                <Link to="/edit-cat">
+                                    <Button buttonStyle="primary" buttonColor="yellow" buttonSize="btn--small">
+                                        Edit Cat Info
+                                    </Button>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                     <div className="col">
@@ -53,7 +56,7 @@ function MyCatPage() {
                 <div className="title-line-center">
                     Trophy Collection
                 </div>
-                <div className="row home__body-row" style={{display:'flex', flexDirection: 'row'}}>
+                <div className="row home__body-row" style={{display:'flex', flexDirection: 'row', marginBottom: '30px'}}>
                     <div className="col-trophy">
                         <div className="trophy-line">
                             First Step
@@ -63,7 +66,7 @@ function MyCatPage() {
                                 unlock[0] ? 'trophy-img' : 'trophy-img grey-filter'
                             } />
                         </div>
-                        <div style={{marginTop:"10px"}}>
+                        <div className="btn-center">
                             <Link to="/">
                                 <Button buttonColor={unlock[0] ? "light-blue" : "grey"} buttonSize="btn--small">
                                     Share
@@ -80,7 +83,7 @@ function MyCatPage() {
                                 unlock[1] ? 'trophy-img' : 'trophy-img grey-filter'
                             } />
                         </div>
-                        <div style={{marginTop:"10px"}}>
+                        <div className="btn-center">
                             <Link to="/">
                                 <Button buttonColor={unlock[1] ? "light-blue" : "grey"} buttonSize="btn--small">
                                     Share
@@ -97,7 +100,7 @@ function MyCatPage() {
                                 unlock[2] ? 'trophy-img' : 'trophy-img grey-filter'
                             } />
                         </div>
-                        <div style={{marginTop:"10px"}}>
+                        <div className="btn-center">
                             <Link to="/">
                                 <Button buttonColor={unlock[2] ? "light-blue" : "grey"} buttonSize="btn--small">
                                     Share
@@ -105,6 +108,24 @@ function MyCatPage() {
                             </Link>
                         </div>
                     </div>
+                </div>
+                <div className="row-share">
+                        <Link
+                        className='social-icon-link'
+                        to='/'
+                        target='_blank'
+                        aria-label='Facebook'
+                        >
+                        <FaFacebook color="#5199ec" fontSize="50px"/>
+                        </Link>
+                        <Link
+                        className='social-icon-link'
+                        to='/'
+                        target='_blank'
+                        aria-label='Instagram'
+                        >
+                        <FaInstagram color="#5199ec" fontSize="50px"/>
+                        </Link>
                 </div>
             </div>
             <BodySection {...homeObjDonate} />
