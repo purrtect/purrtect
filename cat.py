@@ -9,7 +9,7 @@ class cat:
 
     #10 kg of CO2 = 1 hp
     def carbon_impact(self, carbon_footprint, price):
-        price_modifier = price * 0.1
+        price_modifier = price * 0.01
         if (price_modifier>10):
             price_modifier = 10
         self.hp_change = round((self.carbon_avg-carbon_footprint)/100*abs(price_modifier))
@@ -21,5 +21,10 @@ class cat:
 
     def health_point(self):
         self.hp += self.hp_change
+        if (self.hp < 0):
+            self.dead = True
+            self.hp = 0
+        else:
+            self.dead = False
         return
 
