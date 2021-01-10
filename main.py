@@ -50,8 +50,7 @@ def emissions():
         raise InvalidAPICall('Please include product and/category in POST or GET.', 400)
     else:
         # get cat
-        if not cat:
-            cat = Cat('placeholder', 0)
+        cat = Cat('placeholder', 0)
 
         # search for product
         if product is not None:
