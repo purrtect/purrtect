@@ -20,7 +20,7 @@ def homepage():
 def stuffpage():
     return '<h1>stuff</h1>'
 
-@app.route('/product', methods=['GET', 'POST'])
+@app.route('/emissions', methods=['GET', 'POST'])
 def return_category():
     product = request.values.get("product")
     category = request.values.get("category")
