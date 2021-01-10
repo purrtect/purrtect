@@ -161,3 +161,10 @@
       flex-direction: column;
     }
   }
+
+.line {
+  height: 0;
+  width: 100%;
+  border-top: 1px solid white;
+  padding-bottom: 20px;
+}

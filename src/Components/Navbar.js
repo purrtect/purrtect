@@ -26,7 +26,7 @@ function Navbar() {
     return (
         <>
             <IconContext.Provider value={{ color: '#374785' }}>
-                <div classNme="navbar">
+                <div className="navbar">
                     <div className="navbar-container">
                         <Link to='/' className="navbar-logo" onClick={closeMobileMenu}>
                             <img src={Logo} alt="PurrtectorLogo" width="38px" height="38px" className='navbar-icon' />
@@ -59,11 +59,11 @@ function Navbar() {
                             <li className="nav-btn">
                                 {button ? (
                                     <Link to='/sign-up' className="btn-link" onClick={closeMobileMenu}>
-                                        <Button buttonColor="light-blue" buttonStyle="btn--outline" buttonSize='btn--medium'>SIGN UP</Button>
+                                        <Button buttonColor="light-blue" buttonStyle="btn--outline" buttonSize='btn--medium'>SIGN UP/IN</Button>
                                     </Link>
                                 ) : (
                                     <Link to='/sign-up' className="btn-link" onClick={closeMobileMenu}>
-                                        <Button buttonColor="light-blue" buttonStyle="btn--outline" buttonSize='btn--medium'>Sign up</Button>
+                                        <Button buttonColor="light-blue" buttonStyle="btn--outline" buttonSize='btn--medium'>SIGN UP/IN</Button>
                                     </Link>
                                 )}
                             </li>

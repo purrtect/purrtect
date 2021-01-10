@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './Footer.css';
 import { Button } from '../../Button';
 import { Link } from 'react-router-dom';
@@ -13,6 +13,47 @@ import {
 } from 'react-icons/fa';
 
 function Footer() {
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("")
+  const [login, setlogin] = useState("Sign up instead");
+  const [submitText, setsubmitText] = useState("Sign in");
+
+  const handleClickLogin = () => {
+    if(login === "Sign up instead")
+    {
+      setlogin("Sign in instead");
+      setsubmitText("Sign up");
+    }
+    else{
+      setlogin("Sign up instead");
+      setsubmitText("Sign in");
+    }
+  };
+
+  const handleEmailInput = (email) => {
+    setemail(email);
+  }
+
+  const handlePasswordInput = (password) => {
+    setpassword(password);
+  }
+
+  const handleSubmit = (event) => {
+    alert('A form was submitted: ' + this.state);
+
+    fetch('backend.purrtect.live/debug', {
+        method: 'POST',
+        // We convert the React state to JSON and send it as the POST body
+        body: JSON.stringify({useremail: email, password:password})
+      }).then(function(response) {
+        console.log(response)
+        setlogin("alallalala");
+        return response.json();
+      });
+
+    event.preventDefault();
+  }
+
   return (
     <div className='footer-container'>
       <section className='footer-subscription'>
@@ -22,21 +63,26 @@ function Footer() {
         <p className='footer-subscription-text'>
           And help save the earth!
         </p>
+        <Button onClick={handleClickLogin} buttonColor="red" buttonSize="button--mobile" buttonStyle='btn--primary'>{login}</Button>
+        <br></br>
+        <div className="line"></div>
         <div className='input-areas'>
-          <form>
+          <form onSubmit={handleSubmit}>
             <input
               className='footer-input'
               name='email'
               type='email'
               placeholder='Your Email'
+              onChange={handleEmailInput}
             />
             <input
               className='footer-input'
               name='password'
               type='password'
               placeholder='Your Password'
+              onChange={handlePasswordInput}
             />
-            <Button buttonColor="primary" buttonSize="button--medium" buttonStyle='btn--outline'>Sign in/up</Button>
+            <Button buttonColor="light-blue" buttonSize="button--medium" buttonStyle='btn--outline'>{submitText}</Button>
           </form>
         </div>
       </section>
