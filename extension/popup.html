@@ -3,33 +3,26 @@
 
 <html>
   <head>
-    <div class="title-line">Purrtector</div>
+    <div id = "title" class="title-line">Purrtector</div>
     <script src="popup.js"></script>
   </head>
   <body>
     <div class="row">
       <div class="col">
-        <img class="pop-up-img" src="angry.gif" alt="angry cat">
+        <img id="cat_vid" class="pop-up-img" src="assets/cat_idle_8fps.gif" alt="angry cat">
       </div>
       <div class="col">
-        <div id="dialogue" class="dialog-text-wrapper">
-          Dumb ass human you just killed me :(
+        <div id="dialogue" class="dialog-text-wrapper"> a
         </div>
-        <div id="progressbar">
-          <div id="old-health">
-            <div id="new-health"></div>
-          </div>
-        </div>
-        <div id="health" class="status-text-wrapper">PET HP: -1000</div>
+        <label id = "num_health" for="file">10/20</label>
+        <progress id="file" value="10" max="20"> 10 </progress>
+        <div id="health" class="status-text-wrapper"> </div>
       </div>
     </div>
     <div class="row-single-btn">
       <button id = "go to site">
         Go to Purrtector App
       </button>
-    </div>
-    <div class="row-single-btn">
-      <button id="checkPage">Scrape info</button>
     </div>
     <b></b>
   </body>

@@ -47,8 +47,15 @@ button {
 }
 
 .pop-up-img {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
+    image-rendering: optimizeSpeed; 
+    image-rendering: -moz-crisp-edges; 
+    image-rendering: -o-crisp-edges; 
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+    image-rendering: optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
 }
 
 .dialog-text-wrapper {
@@ -70,26 +77,3 @@ button {
     margin-bottom: 15px;
     margin-left: -10px;
 }
-
-
-#progressbar {
-    background-color: black;
-    border-radius: 13px;
-    /* (height of inner div) / 2 + padding */
-    padding: 3px;
-  }
-  
-  #progressbar>div {
-    background-color: orange;
-    width: 80%;
-    /* Adjust with JavaScript */
-    height: 13px;
-    border-radius: 10px;
-  }
-  #progressbar>div>div {
-    background-color: green;
-    width: 100%;
-    /* Adjust with JavaScript */
-    height: 13px;
-    border-radius: 10px;
-  }
