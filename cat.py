@@ -14,7 +14,7 @@ class Cat:
         if (32.87-carbon_footprint > 0):
             self.hp_change = round((32.87 - carbon_footprint) / 10)
         else:
-            self.hp_change = round((32.87-carbon_footprint)/100*abs(price_modifier))
+            self.hp_change = round((32.87-carbon_footprint)/20*abs(1+price_modifier))
         if (self.hp_change > 3):
             self.hp_change = 3
         if (self.hp_change < -5):
@@ -45,3 +45,9 @@ class Cat:
             'dead': self.dead
         })
 
+if __name__ == '__main__':
+    cate = Cat('Roy', 'Blue')
+    cate.get_hp_from_carbon(60, 100)
+    cate.change_hp(cate.hp_change)
+    print(cate.hp_change)
+    print(cate.hp)
