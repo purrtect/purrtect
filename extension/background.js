@@ -27,23 +27,30 @@ function resetIcon(){
 
 function format_getURL(url, data){
     var data = url + "?" + 
-    "product=" +  data.title + "&" +
-    "category=" +  data.category + "&" +
+    "product=" +  data.title.replace("&amp;", "%26") + "&" +
+    "category=" +  data.category.replace("&amp;", "%26") + "&" +
     "isPrime=" +  data.is_prime + "&" +
-    "weight=" +  data.weight + "&" +
-    "price=" + data.price + "&" +
-    "zip1=" +  data.user_zip + "&" +  
-    "zip2=" +  data.Manufacturer_contact
+    "weight=" +  data.weight.replace("&amp;", "%26") + "&" +
+    "price=" + data.price.replace("&amp;", "%26") + "&" +
+    "zip1=" +  data.user_zip.replace("&amp;", "%26") + "&" +  
+    "zip2=" +  data.Manufacturer_contact.replace("&amp;", "%26")
 
     return data;
 }
 
-function httpGetAsync(theUrl)
+function httpGetAsync(theUrl, topic)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            console.log(xmlHttp.responseText);
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+            var jsonvar = xmlHttp.responseText;
+            var jsobj = JSON.parse(jsonvar);
+            console.log(jsobj);
+            if(jsobj.success){
+                chrome.runtime.sendMessage({msg_type: "HTTP_GET_RESP", 
+                                            topic: topic, retval: jsobj}, function(response){});
+            }
+        }
     }
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
@@ -78,12 +85,17 @@ chrome.runtime.onMessage.addListener(
         console.log(request.item_names[0]);
     }
     else if (request.msg_type === "SITE_BASIC_INFO_MSG"){
-      console.log(request.extraction);
       chrome.browserAction.setIcon({path: "earth.png"}, function(){});
       var post_url = format_getURL("https://purrtect.live/emissions", request.extraction);
       console.log(post_url);
-      httpGetAsync(post_url);
+      httpGetAsync(post_url, "emissions");
       Notification.display(opt);
+    }
+    else if(request.msg_type === "HTTP_GET_RESP"){
+        if(request.topic === "emissions"){
+            //we now have emissions data probably update the js or something
+            console.log(request.retval);
+        }
     }
     sendResponse({farewell: request.msg_type+" success"});
     }
