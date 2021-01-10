@@ -59,7 +59,7 @@ function Navbar() {
                             <li className="nav-btn">
                                 <Link to='/sign-up' className="btn-link" onClick={closeMobileMenu}>
                                     <Button buttonSize={button ? "btn--medium" : "btn--small"} buttonColor="primary">
-                                        Sign In/Up
+                                        Logged In
                                     </Button>
                                 </Link>
                             </li>

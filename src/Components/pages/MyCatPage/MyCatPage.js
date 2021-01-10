@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import BodySection from '../../BodySection'
 import '../../BodySection.css'
@@ -8,7 +8,7 @@ import Fish from '../../images/fish.png'
 import OrangeTrophy from '../../images/cat-trophy-1.png'
 import GreyTrophy from '../../images/cat-trophy-2.png'
 import CandyTrophy from '../../images/cat-trophy-3.png'
-import { FaFacebook, FaInstagram } from 'react-icons/fa'
+import { FaFacebook, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
 const homeObjDonate = {
     lightBg: false,
@@ -24,9 +24,48 @@ const homeObjDonate = {
     link: '/donate'
 }
 
-const unlock = [true, false, false]
+const unlock = [true, true, false]
 
 function MyCatPage() {
+    const [one, setone] = useState("Select");
+    const [two, settwo] = useState("Select");
+    const [three, setthree] = useState("Select");
+    const [shareable, setshareable] = useState(false);
+
+    const clickOne = () => {
+        setone("Select");
+        setshareable(false);
+        if (unlock[0])
+        {
+            setone("Selected");
+            setshareable(true);
+        }
+        settwo("Select");
+        setthree("Select");
+    }
+    const clickTwo = () => {
+        settwo("Select");
+        setshareable(false);
+        if (unlock[1])
+        {
+            settwo("Selected");
+            setshareable(true);
+        }
+        setone("Select");
+        setthree("Select");
+    }
+    const clickThree = () => {
+        setthree("Select");
+        setshareable(false);
+        if (unlock[2])
+        {
+            setthree("Selected");
+            setshareable(true);
+        }
+        settwo("Select");
+        setone("Select");
+    }
+
     return (
         <>
             <div className='edit-cat-body-section'>
@@ -35,7 +74,7 @@ function MyCatPage() {
                         <div className="home__body-text-wrapper">
                             <div className='cat-info-line'>Name: ThunderGrey</div>
                             <div className='cat-info-line'>Skin: Grey</div>
-                            <div className='cat-info-line' style={{padding:"0 0 20px 0"}}>Exp: Need Graphics</div>
+                            <div className='cat-info-line' style={{padding:"0 0 20px 0"}}>Exp: 1030</div>
                             <div className='btn-to-right'>
                                 <Link to="/edit-cat">
                                     <Button buttonStyle="primary" buttonColor="yellow" buttonSize="btn--small">
@@ -67,11 +106,9 @@ function MyCatPage() {
                             } />
                         </div>
                         <div className="btn-center">
-                            <Link to="/">
-                                <Button buttonColor={unlock[0] ? "light-blue" : "grey"} buttonSize="btn--small">
-                                    Share
-                                </Button>
-                            </Link>
+                            <Button onClick={clickOne} buttonColor={unlock[0] ? "light-blue" : "grey"} buttonSize="btn--small">
+                                {one}
+                            </Button>
                         </div>
                     </div>
                     <div className="col-trophy">
@@ -84,11 +121,9 @@ function MyCatPage() {
                             } />
                         </div>
                         <div className="btn-center">
-                            <Link to="/">
-                                <Button buttonColor={unlock[1] ? "light-blue" : "grey"} buttonSize="btn--small">
-                                    Share
-                                </Button>
-                            </Link>
+                            <Button onClick={clickTwo} buttonColor={unlock[1] ? "light-blue" : "grey"} buttonSize="btn--small">
+                                {two}
+                            </Button>
                         </div>
                     </div>
                     <div className="col-trophy">
@@ -101,31 +136,28 @@ function MyCatPage() {
                             } />
                         </div>
                         <div className="btn-center">
-                            <Link to="/">
-                                <Button buttonColor={unlock[2] ? "light-blue" : "grey"} buttonSize="btn--small">
-                                    Share
-                                </Button>
-                            </Link>
+                            <Button onClick={clickThree} buttonColor={unlock[2] ? "light-blue" : "grey"} buttonSize="btn--small">
+                                {three}
+                            </Button>
                         </div>
                     </div>
                 </div>
                 <div className="row-share">
-                        <Link
-                        className='social-icon-link'
-                        to='/'
-                        target='_blank'
-                        aria-label='Facebook'
-                        >
-                        <FaFacebook color="#5199ec" fontSize="50px"/>
-                        </Link>
-                        <Link
-                        className='social-icon-link'
-                        to='/'
-                        target='_blank'
-                        aria-label='Instagram'
-                        >
-                        <FaInstagram color="#5199ec" fontSize="50px"/>
-                        </Link>
+                        <a  target="_blank"
+                            rel="noreferrer"
+                            href={shareable ? "https://backend.purrtect.live/share?site=facebook&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "purrtect.live/my-cat"}>
+                            <FaFacebook color="#5199ec" fontSize="50px"/>
+                        </a>
+                        <a  target="_blank"
+                            rel="noreferrer"
+                            href={shareable ? "https://backend.purrtect.live/share?site=twitter&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "purrtect.live/my-cat"}>
+                            <FaTwitter color="#5199ec" fontSize="50px"/>
+                        </a>
+                        <a  target="_blank"
+                            rel="noreferrer"
+                            href={shareable ? "https://backend.purrtect.live/share?site=linkedin&subject=stuff&message=message&link=https://purrtect.live/my-cat" : "purrtect.live/my-cat"}>
+                            <FaLinkedin color="#5199ec" fontSize="50px"/>
+                        </a>
                 </div>
             </div>
             <BodySection {...homeObjDonate} />

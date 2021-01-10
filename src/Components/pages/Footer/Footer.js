@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import './Footer.css';
 import { Button } from '../../Button';
-import { Link } from 'react-router-dom';
-import Logo from '../../images/cat-leaf.png'
+import { Link} from 'react-router-dom';
+import Logo from '../../images/cat-leaf.png';
 
 import {
   FaFacebook,
@@ -40,15 +40,37 @@ function Footer() {
 
   const handleSubmit = (event) => {
     alert('A form was submitted: ' + this.state);
+    //////////////////////////////frank's changes
+    var theUrl = "https://backend.purrtect.live/authentication?" +
+                  "username=" + email + "&" +
+                  "password=" + password;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+      if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+        console.log(xmlHttp.responseText);
+        var resp = JSON.parse(xmlHttp.responseText)
+        if (resp.success){
+          this.props.history.push("/my-cat");
+        }
+        else
+        {
+          this.props.history.push("/donate");
+        }
+      }
+    }
 
-    fetch('backend.purrtect.live/authentication', {
-        method: 'POST',
-        // We convert the React state to JSON and send it as the POST body
-        body: JSON.stringify({useremail: email, password:password})
-      }).then(function(response) {
-        console.log(response)
-        return response.json();
-      });
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+
+    /////////////////////////////frank's changes
+    // fetch('backend.purrtect.live/authentication', {
+    //     method: 'POST',
+    //     // We convert the React state to JSON and send it as the POST body
+    //     body: JSON.stringify({useremail: email, password:password})
+    //   }).then(function(response) {
+    //     console.log(response)
+    //     return response.json();
+    //   });
 
     event.preventDefault();
   }
@@ -81,7 +103,7 @@ function Footer() {
               placeholder='Your Password'
               onChange={handlePasswordInput}
             />
-            <Button buttonColor="light-blue" buttonSize="button--medium" buttonStyle='btn--outline'>{submitText}</Button>
+            <Button type="submit" buttonColor="light-blue" buttonSize="button--medium" buttonStyle='btn--outline'>{submitText}</Button>
           </form>
         </div>
       </section>

@@ -28,11 +28,14 @@ function EditCatPage() {
                                 </select>
                             </form>
                             <br></br>  
-                            <Link to="/">
-                                <Button buttonSize='btn--mobile' buttonColor="red">
-                                    Submit Changes
-                                </Button>
-                            </Link>                     
+                            <div style={{paddingLeft:"30px"}}>
+                                <Link to="/">
+                                    <Button buttonSize='btn--mobile' buttonColor="light-blue">
+                                        Submit Changes
+                                    </Button>
+                                </Link>
+                            </div>
+                                                
                         </div>
                     </div>
                     <div className="col">

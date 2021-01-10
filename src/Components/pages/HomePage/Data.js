@@ -22,12 +22,12 @@ export const homeObjTwo = {
     lightTextDesc: false,
     topLine: 'Carbon Footprint Tracking',
     headline: 'Help Save the Environment',
-    description: 'Create a better world with cats?',
+    description: 'Decrease your carbon footprint, and raise your pet!',
     buttonLabel: 'Check My Contribution',
     imgStart: 'start',
     img: Earth,
     alt: 'Earth',
-    link: '/log-in'
+    link: '/history'
 }
 
 export const homeObjThree = {
@@ -41,5 +41,5 @@ export const homeObjThree = {
     imgStart: '',
     img: CandyCatCrown,
     alt: 'Candy Cat',
-    link: '/log-in'
+    link: '/my-cat'
 }
