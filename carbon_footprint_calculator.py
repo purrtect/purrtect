@@ -17,11 +17,17 @@ Train = 0.00007
 ## Category: Amazon category emission, kg carbon co2 per kg product weight (in float)
 ## Zip1, zip2, zip code of the orgin and destination (in string)
 ## weight --> mass of the product, either in g, or kg (in string)
+
+## Returns:
+## Total Carbon footprint, Shipping Carbon footprint, Product Carbon footprint, loc1 of zip1, loc2 of zip2
 def carbon_footprint(IsPrime, category, zip1, zip2, weight):
-    distance = distance_calculator(zip1, zip2)
-    if (weight != None):
+    distance, loc1, loc2 = distance_calculator(zip1, zip2)
+    numPattern = '\d+\.?\d*'
+
+    if (weight != None and len(re.findall(numPattern, weight)) != 0):
         weight = weight_calculator(weight)
     else:
+        print("weight is invalid, assume 1kg")
         weight = 1 #assume weight is 1kg
 
     #get product category
@@ -38,7 +44,9 @@ def carbon_footprint(IsPrime, category, zip1, zip2, weight):
         shipping_emission = weight * (Truck * distance * 0.2 + Train * distance * 0.8)
 
     print("Shipping emission %f, Product emission %f" % (shipping_emission, product_emission))
-    return shipping_emission + product_emission
+    return shipping_emission + product_emission, shipping_emission, product_emission, loc1, loc2
+
+
 
 def distance_calculator(zip1, zip2):
     zip1 = zip1.replace(' ','')
@@ -47,6 +55,8 @@ def distance_calculator(zip1, zip2):
     try:
         response = urllib.request.urlopen(def_google_url).read()
         data = json.loads(response.decode())
+        loc2 = data['destination_addresses']
+        loc1 = data['origin_addresses']
         result = data["rows"][0]["elements"][0]["distance"]
         #print(data)
         distance = float(result['text'].replace(',','')[:-3])
@@ -54,15 +64,20 @@ def distance_calculator(zip1, zip2):
     except:
         #default distance to 1000
         print("Invalid zipcodes, using default distance: 1000km")
+        loc1 = None
+        loc2 = None
         distance = 1000.0
-    return distance
+    return distance, loc1, loc2
 
 #takes in weight of the product in g, gram, kg, kilogram
 #returns weight in kg
 def weight_calculator(weight):
-    x = weight.split(' ')
-    num = float(x[0])
-    unit = x[1]
+    numPattern = '\d+\.?\d*'
+    try:
+        num = float(re.findall(numPattern, weight)[0])
+    except:
+        print("no num found")
+        num = 1
     patternKG = '(?:kg|kilo)'
     if(len(re.findall(patternKG, weight))==0): #in grams
         num /=1000
@@ -72,7 +87,7 @@ def weight_calculator(weight):
 if __name__ =='__main__':
     zipcode1 = '91748'
     zipcode2 = 'L4C0P8'
-    weight = '12 kg'
+    weight = '1002 kg'
     category = 0.1
-    isPrime = False
+    isPrime = True
     print(carbon_footprint(isPrime,category,zipcode1, zipcode2, weight))
