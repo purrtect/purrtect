@@ -80,6 +80,40 @@ function httpGetAsync(theUrl, topic)
     xmlHttp.send(null);
 }
 
+function httpGetAsync2(theUrls, theUrl)
+{   console.log(theUrl);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+            var jsonvar = xmlHttp.responseText;
+            var jsobj = JSON.parse(jsonvar);
+            console.log(jsobj);
+            if(jsobj.success){
+                popup_context.hp_change += jsobj.hp_change;
+                popup_context.emissions = jsobj.emissions.total_emissions;
+            }
+            else{
+                popup_context.error_state = true;
+            }
+            var next_index = theUrls.indexOf(theUrl)+1;
+            if (next_index === theUrls.length){
+                //run some shit
+                if(popup_context.hp_change<0)
+                    opt.message = "your purchase cost me ";
+                else
+                    opt.message = "your purchase gave me ";
+                opt.message += popup_context.hp_change.toString() + " hp!!!"
+                Notification.display(opt);
+                console.log("end");
+            }
+            else httpGetAsync2(theUrls, theUrls[next_index])
+        }
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+
+
 //detects urls of interest and launches the whole process
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
     if (changeInfo.status != "complete"){
@@ -107,19 +141,16 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
     if (request.msg_type === "CHECKOUT_INFO_MSG"){
+        var urls = []
         for (var i = 0; i<request.item_names.length; i++){
             console.log(request.item_names[i]);
             var post_url = format_getURL2("https://backend.purrtect.live/purchase", {title: request.item_names[i], 
                                                         is_prime:request.item_prime[i], user_zip: request.zip,
                                                         price: request.item_prices[i]});
-            httpGetAsync(post_url, "emissions");
+            urls.push(post_url);
         }
-        if(popup_context.hp_change<0)
-            opt.message = "your purchase cost me ";
-        else
-            opt.message = "your purchase gave me ";
-        opt.message += popup_context.hp_change.toString() + " hp!!!"
-        Notification.display(opt);
+        if (urls.length !== 0) 
+            httpGetAsync2(urls, urls[0]);
         sendResponse({farewell: request.msg_type+" success"});
     }
     else if (request.msg_type === "SITE_BASIC_INFO_MSG"){
