@@ -19,9 +19,12 @@ Train = 0.00007
 ## weight --> mass of the product, either in g, or kg (in string)
 def carbon_footprint(IsPrime, category, zip1, zip2, weight):
     distance = distance_calculator(zip1, zip2)
-    if (weight != None):
+    numPattern = '\d+\.?\d*'
+
+    if (weight != None and len(re.findall(numPattern, weight)) != 0):
         weight = weight_calculator(weight)
     else:
+        print("weight is invalid, assume 1kg")
         weight = 1 #assume weight is 1kg
 
     #get product category
@@ -72,7 +75,7 @@ def weight_calculator(weight):
 if __name__ =='__main__':
     zipcode1 = '91748'
     zipcode2 = 'L4C0P8'
-    weight = '12 kg'
+    weight = 'kg'
     category = 0.1
     isPrime = False
     print(carbon_footprint(isPrime,category,zipcode1, zipcode2, weight))
