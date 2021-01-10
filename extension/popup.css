@@ -1,0 +1,72 @@
+body {
+  min-width: 300px;
+  padding-bottom: 10px;
+  position: relative;
+  vertical-align:middle;
+  background-color: pink;
+  border: 3px solid lightblue;
+}
+
+button {
+    margin: 0 auto;
+    color: black;
+    background-color: #91d3ff;
+    border-radius: 5px;
+}
+
+.title-line {
+    color: #3e4d88;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.row {
+    padding: 0 5px;
+    align-content: stretch;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.row-single-btn {
+    padding-top: 10px;
+    align-content: stretch;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.col {
+    margin-bottom: 5px;
+    padding-right: 5px;
+    padding-left: 10px;
+    flex: 1;
+    max-width: 100px;
+    flex-basis: 50%;
+}
+
+.pop-up-img {
+    width: 70px;
+    height: 70px;
+}
+
+.dialog-text-wrapper {
+    color: black;
+    margin-left: -10px;
+    margin-right: -40px;
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.status-text-wrapper {
+    color: red;
+    font-size: 12px;
+    line-height: 13px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: -10px;
+}
