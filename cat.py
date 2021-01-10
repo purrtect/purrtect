@@ -19,7 +19,7 @@ class Cat:
 
     def change_hp(self, hp_change):
         self.hp += hp_change
-        if (self.hp < 0):
+        if (self.hp <= 0):
             self.dead = True
             self.hp = 0
         else:
