@@ -21,7 +21,7 @@ def stuffpage():
     return '<h1>stuff</h1>'
 
 @app.route('/emissions', methods=['GET', 'POST'])
-def return_category():
+def emissions():
     product = request.values.get("product")
     category = request.values.get("category")
     if category is None and product is None:
@@ -31,16 +31,28 @@ def return_category():
         if product is not None:
             emissions = get_emissions('Product', product)
             if emissions is not None:
-                # TODO: format and return product emissions
-                return str(emissions)
+                return jsonify({
+                'type': 'product',
+                'name': product.lower(),
+                'emissions': emissions,
+                'success': True
+            })
         
         # search for category
-        ret = get_emissions('Category', category)
-        if ret is not None:
-            # TODO: format and return category emissions
-            return str(ret)
+        emissions = get_emissions('Category', category)
+        if emissions is not None:
+            # TODO: Insert Steven Function
+            return jsonify({
+                'type': 'category',
+                'name': category.lower(),
+                'emissions': emissions,
+                'success': True
+            })
         else:
-            return "error"
+            return jsonify({
+                'success': False
+            })
+
 
 @app.errorhandler(InvalidAPICall)
 def handle_invalid_usage(error):
