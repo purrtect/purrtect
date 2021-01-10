@@ -1,3 +1,4 @@
+from cat import Cat
 import logging
 import authentication
 from share import share
@@ -52,8 +53,8 @@ def emissions():
 
         if session['authenticated']:
             cat = get_cat(session['username'])
-        else:
-            cat = False
+        if not cat:
+            cat = Cat('placeholder', 0)
 
         # search for product
         if product is not None:
