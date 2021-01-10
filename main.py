@@ -103,6 +103,15 @@ def auth():
         })
     # return jsonify(authentication.login(username, password))
 
+@app.route('/share', methods=['GET', 'POST'])
+def get_social_url():
+    site = request.values['site']
+    subject = request.values['subject']
+    message = request.values['subject']
+    link = request.values['subject']
+
+    
+
 @app.route('/debug', methods=['GET', 'POST'])
 def debug():
     return f"{session['authenticated']} | {session['username']}"
