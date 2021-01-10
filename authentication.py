@@ -2,7 +2,7 @@ from firestore import get_user
 import bcrypt
 
 def create_user(username, password):
-
+    
     pass
 
 def login(username, password):

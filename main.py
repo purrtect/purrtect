@@ -11,6 +11,9 @@ import google.cloud.logging
 
 app = Flask(__name__)
 
+app.secret_key = '\x16\xbe8\xff\x0e\xed;\x80\x8d\xec3R.\xc3\x7f\xfdN\xc7\xb4&\xdc3\xa9'
+app.config['SESSION_TYPE'] = 'redis'
+
 app.debug = False
 app.testing = False
 
@@ -23,7 +26,13 @@ def stuffpage():
     return '<h1>stuff</h1>'
 
 # /emissions
-# 
+# params (GET OR POST):
+#   product: product name
+#   category: category name
+#   isPrime: true or false - is prime delivery offered
+#   weight: mass of the object
+#   zip1: source zip/postal code
+#   zip2: destination zip/postal code
 @app.route('/emissions', methods=['GET', 'POST'])
 def emissions():
     product = request.values.get("product")
@@ -70,9 +79,22 @@ def auth():
     # replace with request.form in deployment
     username = request.values["username"]
     password = request.values["password"]
-    return f'{authentication.login(username,password)}'
-    return jsonify(authentication.login(username, password))
+    if authentication.login(username,password):
+        session['authenticated'] = True
+        session['username'] = username
+        return jsonify({
+            "success": True,
+            "username": username
+        })
+    else:
+        return jsonify({
+            "success": False
+        })
+    # return jsonify(authentication.login(username, password))
 
+@app.route('/debug', methods=['GET'])
+def debug():
+    return f"{session['authenticated']} | {session['username']}"
 
 @app.errorhandler(InvalidAPICall)
 def handle_invalid_usage(error):
