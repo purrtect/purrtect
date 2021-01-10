@@ -40,15 +40,33 @@ function Footer() {
 
   const handleSubmit = (event) => {
     alert('A form was submitted: ' + this.state);
+    //////////////////////////////frank's changes
+    var theUrl = "backend.purrtect.live/authentication?" +
+                  "username=" + email + "&" +
+                  "password=" + password;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+      if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+        console.log(xmlHttp.responseText);
+        var resp = JSON.parse(xmlHttp.responseText)
+        if (resp.success && resp.userExists){
+          console.log("log this man in");
+        }
+      }
+    }
 
-    fetch('backend.purrtect.live/authentication', {
-        method: 'POST',
-        // We convert the React state to JSON and send it as the POST body
-        body: JSON.stringify({useremail: email, password:password})
-      }).then(function(response) {
-        console.log(response)
-        return response.json();
-      });
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+
+    /////////////////////////////frank's changes
+    // fetch('backend.purrtect.live/authentication', {
+    //     method: 'POST',
+    //     // We convert the React state to JSON and send it as the POST body
+    //     body: JSON.stringify({useremail: email, password:password})
+    //   }).then(function(response) {
+    //     console.log(response)
+    //     return response.json();
+    //   });
 
     event.preventDefault();
   }
