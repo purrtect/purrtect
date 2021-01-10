@@ -14,7 +14,8 @@ def share(site, subject, message, link):
 
     elif(site == 'email'):
         url = 'mailto:?subject=' + urllib.parse.quote(subject)+ '&body='+urllib.parse.quote(message)+"%0A%0A"+urllib.parse.quote(link)
-
+    elif(site == 'linkedin'):
+        url = 'https://www.linkedin.com/sharing/share-offsite/?url=' + urllib.parse.quote(link)
     return url
 if __name__ == '__main__':
-    print(share('email', "This is the title", "Hello World!", "https://www.google.com"))
+    print(share('linkedin', "This is the title", "Hello World!", "https://www.google.com"))
