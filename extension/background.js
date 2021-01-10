@@ -6,7 +6,7 @@ var opt = {
     iconUrl: "earth.png",
     silent: true
 };
-
+//      Notification.display(opt);
 var Notification=(function(){
     var notification=null;
   
@@ -21,12 +21,39 @@ var Notification=(function(){
     };
 })();
 
+function resetIcon(){
+    chrome.browserAction.setIcon({path: "icon.png"}, function(){});
+}
+
+function format_getURL(url, data){
+    var data = url + "?" + 
+    "product=" +  data.title + "&" +
+    "category=" +  data.category + "&" +
+    "isPrime=" +  data.is_prime + "&" +
+    "weight=" +  data.weight + "&" +
+    "price=" + data.price + "&" +
+    "zip1=" +  data.user_zip + "&" +  
+    "zip2=" +  data.Manufacturer_contact
+
+    return data;
+}
+
+function httpGetAsync(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            console.log(xmlHttp.responseText);
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+
 //detects urls of interest and launches the whole process
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
     if (changeInfo.status != "complete"){
         return;
     }
-
     console.log(tab.url);
     if(tab.url === "https://www.amazon.ca/gp/buy/spc/handlers/display.html?hasWorkingJavascript=1"){
         console.log("On amazon checkout page");
@@ -39,6 +66,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab){
             file: 'extract_product.js'
         },null);
     }
+    else {
+        resetIcon();
+    }
 });
 //document.getElementById("spc-orders").getElementsByClassName("asin-title")[0].innerHTML
 //recieves message when scraping is complete
@@ -49,6 +79,10 @@ chrome.runtime.onMessage.addListener(
     }
     else if (request.msg_type === "SITE_BASIC_INFO_MSG"){
       console.log(request.extraction);
+      chrome.browserAction.setIcon({path: "earth.png"}, function(){});
+      var post_url = format_getURL("https://purrtect.live/emissions", request.extraction);
+      console.log(post_url);
+      httpGetAsync(post_url);
       Notification.display(opt);
     }
     sendResponse({farewell: request.msg_type+" success"});
@@ -56,7 +90,11 @@ chrome.runtime.onMessage.addListener(
   );
 
   chrome.notifications.onClicked.addListener(function(notificationId){
-    //we could make the user open our website if the button gets clicked idk
+    chrome.tabs.create({ url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstleyVEVO" });
   });
+
+  chrome.tabs.onActiveChanged.addListener(function(tabId, selectInfo){
+      resetIcon();
+  })
 
 

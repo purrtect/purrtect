@@ -48,7 +48,7 @@ function processCells(tag, value){
 [extraction.title, extraction.web_domain, extraction.category] = document.title.split(":");
 extraction.title = extraction.title.trim();
 extraction.url = document.URL;
-extraction.user_zip = document.getElementById("glow-ingress-line2").innerText.split("...")[1].trim();
+extraction.user_zip = document.getElementById("glow-ingress-line2").innerText.split("...")[1].trim().replace(" ","");
 // category = document.getElementById("wayfinding-breadcrumbs_feature_div").getElementsByTagName("li")[0].getElementsByClassName("a-link-normal a-color-tertiary")[0].innerHTML.trim();
 extraction.category = document.getElementById("nav-search-label-id").innerHTML;
 
