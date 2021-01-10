@@ -1,8 +1,9 @@
 import logging
+import authentication
 from errors import InvalidAPICall
 from firestore import get_emissions
 
-from flask import current_app, flash, Flask, Markup, redirect, render_template,jsonify
+from flask import current_app, flash, Flask, Markup, redirect, render_template, jsonify, session
 from flask import request, url_for
 from google.cloud import error_reporting
 import google.cloud.logging
@@ -52,6 +53,14 @@ def emissions():
             return jsonify({
                 'success': False
             })
+
+@app.route('/authentication', methods=['GET', 'POST'])
+def auth():
+    # replace with request.form in deployment
+    username = request.values["username"]
+    password = request.values["password"]
+    return f'{authentication.login(username,password)}'
+    return jsonify(authentication.login(username, password))
 
 
 @app.errorhandler(InvalidAPICall)

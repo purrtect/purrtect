@@ -14,3 +14,8 @@ def get_emissions(type, name):
         return None 
     else:
         return doc[name]
+
+def get_user(username):
+    username = str(username).lower()
+    db = firestore.Client()
+    return db.collection(u'Users').document(username).get().to_dict()
