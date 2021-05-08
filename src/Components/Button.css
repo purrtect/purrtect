@@ -1,0 +1,128 @@
+:root {
+    --primary: #fff;
+}
+
+.btn {
+    padding: 8px 20px;
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn--primary {
+    background-color: var(--primary);
+    color: white;
+    border: 1px solid var(--primary);
+}
+
+.btn--outline {
+    background-color: transparent;
+    color: white;
+    padding: 8px 20px;
+    border: 2px solid white;
+    transition: all 0.3s ease-out;
+}
+
+.btn--small {
+    padding: 6px 20px;
+    font-size: 16px;
+}
+
+.btn--medium {
+    padding: 8px 12px;
+    font-size: 18px;
+}
+
+.btn--large {
+    padding: 12px 26px;
+    font-size: 20px;
+}
+
+.btn--mobile {
+    text-align: center;
+    border-radius: 4px;
+    width: 90%;
+    text-decoration: none;
+    font-size: 24px;
+    background-color: transparent;
+    color: #fff;
+    transition: all 0.3s ease-out;
+}
+
+.btn--wide {
+    padding: 12px 64px;
+    font-size: 20px;
+}
+
+.btn--large:hover, .btn--medium.hover, .btn--mobile:hover, .btn--outline,
+.btn--primary, .btn--small:hover {
+    transition: all 0.3s ease-out;
+    background: #fff;
+    color: #374785;
+}
+
+.btn--wide:hover {
+    background: #fff;
+    color: #374785;
+    transition: all 0.2s ease-out;
+}
+
+.primary {
+    background-color:#374785;
+    color: white;
+    border: none;
+}
+
+.primary:hover {
+    background-color:white;
+    color: #374785;
+    border: none;
+}
+
+.blue {
+    background-color: #374785;
+    color: white;
+    border: none;
+}
+
+.light-blue {
+    background-color: #009df1;
+    color: white;
+    border: none;
+}
+
+.blue-blue {
+    background-color: #5199ec;
+    color: white;
+    border: none;
+}
+
+.yellow {
+    background-color: #f8e9a1;
+    color: #5199ec;
+    border: none;
+}
+
+.grey {
+    background-color: grey;
+    color: white;
+    border: none;
+}
+
+.red {
+    background-color: #f76c6c;
+    color: white;
+    border: none;
+}
+
+.btn-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 8px 16px;
+    height: 100px;
+    width: 200px;
+}
